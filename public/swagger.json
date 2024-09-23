@@ -1,0 +1,15 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de gestion de dettes",
+        "version": "1.0.0",
+        "description": "API pour gérer les dettes des clients dans un magasin"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000",
+            "description": "Serveur Local"
+        }
+    ]
+
+}

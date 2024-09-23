@@ -42,26 +42,16 @@ class FirebasePromotionService implements PromotionServiceInterface
         $this->promotionRepository->delete($id);
     }
     public function getActivePromotion(string $collection)
-    {
-        $promotions = $this->promotionRepository->all();
-
-        foreach ($promotions as $promotion) {
-            if ($promotion['etat'] === 'Actif') {
-                return new Promotion($promotion);
-            }
-        }
-
-        return null; // Si aucune promotion active n'est trouvée
-    }
-    public function deactivateOtherPromotions(): void
 {
-    // Récupérer toutes les promotions actives
-    $activePromotions = $this->promotionRepository->all()->where('etat', 'Actif');
+    $promotions = $this->promotionRepository->all();
 
-    // Boucler sur ces promotions et les désactiver
-    foreach ($activePromotions as $promotion) {
-        $this->promotionRepository->update($promotion->id, ['etat' => 'Inactif']);
+    foreach ($promotions as $promotion) {
+        if ($promotion['etat'] === 'Actif') {
+            return new Promotion($promotion);
+        }
     }
+
+    return null; // Si aucune promotion active n'est trouvée
 }
 
 }

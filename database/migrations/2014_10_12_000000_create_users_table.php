@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('adresse');
             $table->string('telephone')->nullable();
             $table->string('password')->hash();
-            $table->string('fonction');
+            $table->string('fonction')->nullable();
             $table->string('email')->unique();
             $table->string('photo')->nullable();
             $table->enum('statut', ['Actif', 'Bloquer'])->default('Actif');

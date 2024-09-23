@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReferentielController;
 use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ApprenantController;
 use App\Http\Controllers\AuthController;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -52,6 +53,18 @@ Route::prefix('v1/promotions')->group(function () {
 
     
 });
+
+
+Route::prefix('v1/apprenants')->group(function () {
+    Route::get('/', [ApprenantController::class, 'index']);
+    Route::post('/', [ApprenantController::class, 'store']);
+    Route::get('/{id}', [ApprenantController::class, 'show']);
+    Route::put('/{id}', [ApprenantController::class, 'update']);
+    Route::delete('/{id}', [ApprenantController::class, 'delete']);
+    Route::get('/active', [ApprenantController::class, 'getActiveApprenant']);
+    Route::put('/deactivate', [ApprenantController::class, 'deactivateOtherApprenants']);
+});
+
 // ->middleware(['auth:api'])
 /*
 |--------------------------------------------------------------------------

@@ -11,7 +11,10 @@ use App\Services\FirebaseServiceInterface;
 use App\Repository\FirebaseRepository;
 use App\Services\FirebaseUserService;
 use App\Facades\FirebaseUserFacade;
+use App\Facades\FirebaseApprenantFacade;
 use App\Facades\FirebaseReferentielFacade;
+use App\Repository\FirebaseApprenantRepository;
+use App\Services\FirebaseApprenantService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,6 +46,16 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind('promotion-facade', function($app) {
             return new FirebasePromotionFacade();
+        });
+        $this->app->bind('apprenant-facade', function($app) {
+            return new FirebaseApprenantFacade();
+        });
+        $this->app->singleton(FirebaseApprenantRepository::class, function ($app) {
+            return new FirebaseApprenantRepository();
+        });
+    
+        $this->app->singleton(FirebaseApprenantService::class, function ($app) {
+            return new FirebaseApprenantService($app->make(FirebaseApprenantRepository::class));
         });
     }
 
