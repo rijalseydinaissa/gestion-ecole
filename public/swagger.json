@@ -1,15 +1,522 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API de gestion de dettes",
-        "version": "1.0.0",
-        "description": "API pour gérer les dettes des clients dans un magasin"
+      "title": "API de gestion",
+      "version": "1.0.0",
+      "description": "API pour gérer les utilisateurs, référentiels, promotions et apprenants"
     },
     "servers": [
-        {
-            "url": "http://localhost:5000",
-            "description": "Serveur Local"
+      {
+        "url": "http://localhost:9000/api",
+        "description": "Serveur Local"
+      }
+    ],
+    "paths": {
+      "/v1/login": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Connexion utilisateur",
+          "operationId": "login",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Connexion réussie"
+            }
+          }
         }
-    ]
-
-}
+      },
+      "/v1/logout": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Déconnexion utilisateur",
+          "operationId": "logout",
+          "responses": {
+            "200": {
+              "description": "Déconnexion réussie"
+            }
+          }
+        }
+      },
+      "/v1/users": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Liste des utilisateurs",
+          "operationId": "getUsers",
+          "responses": {
+            "200": {
+              "description": "Liste des utilisateurs retournée"
+            }
+          }
+        },
+        "post": {
+          "tags": ["Users"],
+          "summary": "Création d'un utilisateur",
+          "operationId": "createUser",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Utilisateur créé"
+            }
+          }
+        }
+      },
+      "/v1/users/{id}": {
+        "patch": {
+          "tags": ["Users"],
+          "summary": "Mise à jour d'un utilisateur",
+          "operationId": "updateUser",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Utilisateur mis à jour"
+            }
+          }
+        }
+      },
+      "/v1/users/export": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Exporter les utilisateurs",
+          "operationId": "exportUsers",
+          "responses": {
+            "200": {
+              "description": "Exportation réussie"
+            }
+          }
+        }
+      },
+      "/v1/users/import": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Importer des utilisateurs",
+          "operationId": "importUsers",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserImportRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Importation réussie"
+            }
+          }
+        }
+      },
+      "/v1/referentiels": {
+        "get": {
+          "tags": ["Referentiels"],
+          "summary": "Liste des référentiels",
+          "operationId": "getReferentiels",
+          "responses": {
+            "200": {
+              "description": "Liste des référentiels retournée"
+            }
+          }
+        },
+        "post": {
+          "tags": ["Referentiels"],
+          "summary": "Création d'un référentiel",
+          "operationId": "createReferentiel",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferentielRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Référentiel créé"
+            }
+          }
+        }
+      },
+      "/v1/referentiels/{id}": {
+        "get": {
+          "tags": ["Referentiels"],
+          "summary": "Détails d'un référentiel",
+          "operationId": "getReferentiel",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Détails du référentiel"
+            }
+          }
+        },
+        "patch": {
+          "tags": ["Referentiels"],
+          "summary": "Mise à jour d'un référentiel",
+          "operationId": "updateReferentiel",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferentielRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Référentiel mis à jour"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Referentiels"],
+          "summary": "Suppression d'un référentiel",
+          "operationId": "deleteReferentiel",
+          "responses": {
+            "204": {
+              "description": "Référentiel supprimé"
+            }
+          }
+        }
+      },
+      "/v1/referentiels/archive/referentiels": {
+        "get": {
+          "tags": ["Referentiels"],
+          "summary": "Liste des référentiels archivés",
+          "operationId": "getArchivedReferentiels",
+          "responses": {
+            "200": {
+              "description": "Liste des référentiels archivés retournée"
+            }
+          }
+        }
+      },
+      "/v1/promotions": {
+        "get": {
+          "tags": ["Promotions"],
+          "summary": "Liste des promotions",
+          "operationId": "getPromotions",
+          "responses": {
+            "200": {
+              "description": "Liste des promotions retournée"
+            }
+          }
+        },
+        "post": {
+          "tags": ["Promotions"],
+          "summary": "Création d'une promotion",
+          "operationId": "createPromotion",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Promotion créée"
+            }
+          }
+        }
+      },
+      "/v1/promotions/{id}": {
+        "get": {
+          "tags": ["Promotions"],
+          "summary": "Détails d'une promotion",
+          "operationId": "getPromotion",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Détails de la promotion"
+            }
+          }
+        },
+        "patch": {
+          "tags": ["Promotions"],
+          "summary": "Mise à jour d'une promotion",
+          "operationId": "updatePromotion",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Promotion mise à jour"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Promotions"],
+          "summary": "Suppression d'une promotion",
+          "operationId": "deletePromotion",
+          "responses": {
+            "204": {
+              "description": "Promotion supprimée"
+            }
+          }
+        }
+      },
+      "/v1/promotions/{id}/stats": {
+        "get": {
+          "tags": ["Promotions"],
+          "summary": "Statistiques d'une promotion",
+          "operationId": "getPromotionStats",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Statistiques retournées"
+            }
+          }
+        }
+      },
+      "/v1/apprenants": {
+        "get": {
+          "tags": ["Apprenants"],
+          "summary": "Liste des apprenants",
+          "operationId": "getApprenants",
+          "responses": {
+            "200": {
+              "description": "Liste des apprenants retournée"
+            }
+          }
+        },
+        "post": {
+          "tags": ["Apprenants"],
+          "summary": "Création d'un apprenant",
+          "operationId": "createApprenant",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprenantRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Apprenant créé"
+            }
+          }
+        }
+      },
+      "/v1/apprenants/{id}": {
+        "get": {
+          "tags": ["Apprenants"],
+          "summary": "Détails d'un apprenant",
+          "operationId": "getApprenant",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Détails de l'apprenant"
+            }
+          }
+        },
+        "patch": {
+          "tags": ["Apprenants"],
+          "summary": "Mise à jour d'un apprenant",
+          "operationId": "updateApprenant",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprenantRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Apprenant mis à jour"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Apprenants"],
+          "summary": "Suppression d'un apprenant",
+          "operationId": "deleteApprenant",
+          "responses": {
+            "204": {
+              "description": "Apprenant supprimé"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "LoginRequest": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": ["username", "password"]
+        },
+        "UserRequest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "role": {
+              "type": "string",
+              "enum": ["Admin", "User"]
+            }
+          },
+          "required": ["name", "email", "role"]
+        },
+        "UserImportRequest": {
+          "type": "object",
+          "properties": {
+            "users": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/UserRequest"
+              }
+            }
+          },
+          "required": ["users"]
+        },
+        "ReferentielRequest": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": ["title"]
+        },
+        "PromotionRequest": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "endDate": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "required": ["title", "startDate", "endDate"]
+        },
+        "ApprenantRequest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          "required": ["name", "email"]
+        }
+      }
+    }
+  }
+  

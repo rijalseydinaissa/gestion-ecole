@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\FirebaseApprenantService;
 use App\Services\FirebaseServiceInterface;
+use App\Models\Apprenant;
+use App\Models\Referentiel;
+use App\Models\User;
 
 class ApprenantController extends Controller
 {
@@ -15,29 +17,30 @@ class ApprenantController extends Controller
         $this->apprenantService = $apprenantService;
     }
 
-    // Créer un apprenant
     public function store(Request $request)
     {
-        // $ = $request->validate([
-        //     'user_id' => 'required|exists:users,id', // Lier à un utilisateur existant
-        //     'referentiel_id' => 'required|exists:referentiels,id', // Lier à un référentiel existant
-        //     'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Photo de profil
-        // ]);
-        $validatedData= $request->only('referentiel_id', 'user_id', 'photo');
-        // $photoPath = $request->file('photo')->create('photos_apprenants');
+        // Valider les données d'entrée
+        $validatedData = $request->all();
+
+        $user = User::find($validatedData['user_id']);
+        $referentiel = Referentiel::find($validatedData['referentiel_id']);
         $apprenantData = [
             'user_id' => $validatedData['user_id'],
             'referentiel_id' => $validatedData['referentiel_id'],
-            // 'photo' => $photoPath,
+            'photo' => $validatedData['photo'],
+            // 'user_name' => $user->name, // Exemple d'ajout d'information
+            // 'referentiel_title' => $referentiel->title, // Exemple d'ajout d'information
         ];
+
+        // Créer l'apprenant
         $apprenantId = $this->apprenantService->create('apprenants', $apprenantData);
+
         return response()->json([
             'message' => 'Apprenant créé avec succès',
-            'id' => $apprenantId
+            'id' => $apprenantId,
         ], 201);
     }
 
-    // Récupérer les informations d'un apprenant
     public function show($id)
     {
         $apprenant = $this->apprenantService->find('apprenants',$id);
@@ -49,7 +52,6 @@ class ApprenantController extends Controller
         return response()->json($apprenant, 200);
     }
 
-    // Mettre à jour un apprenant
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
@@ -58,17 +60,13 @@ class ApprenantController extends Controller
             'email' => 'email|unique:apprenants,email,' . $id,
             'etat' => 'string',
         ]);
-
         $this->apprenantService->update('apprenants',$id, $validatedData);
-
         return response()->json(['message' => 'Apprenant mis à jour avec succès'], 200);
     }
 
-    // Supprimer un apprenant
     public function delete($id)
     {
         $this->apprenantService->delete('apprenants',$id);
-
         return response()->json(['message' => 'Apprenant supprimé avec succès'], 200);
     }
 
@@ -76,27 +74,8 @@ class ApprenantController extends Controller
     public function index()
     {
         $apprenants = $this->apprenantService->all('apprenants',);
-
         return response()->json($apprenants, 200);
     }
 
-    // Récupérer l'apprenant actif
-    // public function getActiveApprenant()
-    // {
-    //     $apprenant = $this->apprenantService->getActiveApprenant('apprenants');
-
-    //     if (!$apprenant) {
-    //         return response()->json(['message' => 'Aucun apprenant actif trouvé'], 404);
-    //     }
-
-    //     return response()->json($apprenant, 200);
-    // }
-
-    // // Désactiver tous les autres apprenants
-    // public function deactivateOtherApprenants()
-    // {
-    //     $this->apprenantService->deactivateOtherApprenants();
-
-    //     return response()->json(['message' => 'Tous les autres apprenants ont été désactivés'], 200);
-    // }
+    
 }
