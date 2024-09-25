@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: laravel-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      APP_DEBUG: "true"  # Utilisez "false" en production
+      APP_ENV: "production"  # ou "development"
+      APP_KEY: "<votre_clé_app>"  # Générée via `php artisan key:generate`
+      APP_NAME: "Nom de votre application"
+      APP_URL: "https://votre-url-render.com"  # URL de votre application
+
+      AWS_DEFAULT_REGION: "us-east-1"  # Ou la région que vous utilisez
+      AWS_USE_PATH_STYLE_ENDPOINT: "true"  # Si applicable
+
+      BROADCAST_DRIVER: "log"  # Ou le driver que vous utilisez
+      CACHE_DRIVER: "file"  # Ou le driver que vous utilisez
+
+      DB_CONNECTION: "pgsql"
+      DB_HOST: "dpg-crpsi33tq21c73d7epa0-a"  # Adresse de votre base de données PostgreSQL sur Render
+      DB_PORT: "5432"  # Par défaut pour PostgreSQL
+      DB_DATABASE: "laravelwalo"  # Nom de votre base de données
+      DB_USERNAME: "laravelwalo_user"  # Nom d'utilisateur pour PostgreSQL
+      DB_PASSWORD: "2tp8yheot0HtpfSWq88HJDVsakfSdjOC"  # Mot de passe pour PostgreSQL
+
+      # Autres variables d'environnement nécessaires
+      FIREBASE_CREDENTIALS: "/path/to/firebase/credentials.json"
+      FIREBASE_DATABASE_URL: "https://walonayneikh-default-rtdb.firebaseio.com"
+      FIREBASE_PROJECT_ID: "walonayneikh"
