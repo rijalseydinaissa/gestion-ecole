@@ -36,7 +36,7 @@ RUN rm -f /etc/nginx/sites-enabled/default && \
     ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 # Exposer les ports pour PHP-FPM et Nginx
-EXPOSE 8089
+EXPOSE 9000
 
 # Copier et exécuter le script de démarrage
 COPY start.sh /usr/local/bin/start.sh
