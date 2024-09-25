@@ -1,48 +1,46 @@
-# Utiliser une image PHP officielle avec FPM
+# Utiliser une image officielle de PHP avec FPM (FastCGI Process Manager)
 FROM php:8.3-fpm
 
-# Installer les dépendances nécessaires
+# Installer les dépendances du système
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
     libzip-dev \
+    zip \
     unzip \
     git \
     curl \
-    libonig-dev \
-    pkg-config \
-    libssl-dev \
-    libpq-dev  # Ajout de la bibliothèque PostgreSQL
-
-# Installer les extensions PHP requises pour Laravel
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install pdo pdo_mysql zip \
-    && docker-php-ext-install pdo_pgsql  # Installation du driver pdo_pgsql
-
-# Installer l'extension MongoDB
-RUN pecl install mongodb \
-    && docker-php-ext-enable mongodb
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    nginx \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql zip
 
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copier le projet Laravel dans le conteneur
-WORKDIR /var/www
-COPY . .
+# Copier le contenu de l'application dans le conteneur
+COPY . /var/www
 
-# Installer les dépendances PHP
+# Définir le répertoire de travail
+WORKDIR /var/www
+
+# Installer les dépendances PHP avec Composer
 RUN composer install --optimize-autoloader --no-dev
 
-# Changer les permissions pour les fichiers Laravel (storage et cache)
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
+# Donner les permissions adéquates aux répertoires de stockage et de cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Exposer le port 9000 pour le serveur PHP-FPM
-EXPOSE 9000
+# Copier le fichier de configuration Nginx
+COPY nginx/default.conf /etc/nginx/sites-available/default
+RUN rm -f /etc/nginx/sites-enabled/default && \
+    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-# Lancer PHP-FPM
-CMD ["php-fpm"]
+# Exposer les ports pour PHP-FPM et Nginx
+EXPOSE 8089
+
+# Copier et exécuter le script de démarrage
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Lancer le script de démarrage quand le conteneur démarre
+CMD ["sh", "/usr/local/bin/start.sh"]
