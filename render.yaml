@@ -18,7 +18,7 @@ services:
       CACHE_DRIVER: "file"  # Ou le driver que vous utilisez
 
       DB_CONNECTION: "pgsql"
-      DB_HOST: "dpg-crpsi33tq21c73d7epa0-a"  # Adresse de votre base de données PostgreSQL sur Render
+      DB_HOST: "dpg-crpsi33tq21c73d7epa0-a"  # Utilisez l'adresse fournie par Render pour PostgreSQL
       DB_PORT: "5432"  # Par défaut pour PostgreSQL
       DB_DATABASE: "laravelwalo"  # Nom de votre base de données
       DB_USERNAME: "laravelwalo_user"  # Nom d'utilisateur pour PostgreSQL
