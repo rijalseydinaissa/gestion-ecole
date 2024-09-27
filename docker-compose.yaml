@@ -4,11 +4,11 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile  # Le Dockerfile pour le service PHP avec Laravel
     container_name: app
     volumes:
-      - .:/var/www
-      - ./gestion-ecole/issa.json://home/issa/Bureau/Laravel/GestionEcole/gestion-ecole/issa.json
+      - .:/var/www  # Monter le projet dans le conteneur
+      - ./gestion-ecole/issa.json://home/issa/Bureau/Laravel/GestionEcole/gestion-ecole/issa.json  # Monture du fichier JSON
     networks:
       - laravel
     environment:
@@ -18,23 +18,10 @@ services:
       DB_DATABASE: laravelwalo
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
-
-  webserver:
-    build:
-      context: ./nginx  # Assurez-vous que ce dossier contient le Dockerfile
-      dockerfile: Dockerfile
-    container_name: nginx
-    volumes:
-      - .:/var/www  # Volume de l'application Laravel
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf  # Configuration de Nginx
     ports:
-      - "9000:80"  # Exposition du port 80 du conteneur sur le port 9000 de l'hôte
-    depends_on:
-      - app  # Attendre que le service 'app' soit opérationnel
-    networks:
-      - laravel
+      - "9000:9000"  # Exposer le port 9000 pour le serveur Laravel
 
-  postgres:  # Service PostgreSQL
+  postgres:
     image: postgres:latest
     container_name: postgres
     restart: always
@@ -52,4 +39,4 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:  # Volume persistant pour les données PostgreSQL
+  postgres_data:
