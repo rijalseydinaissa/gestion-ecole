@@ -18,9 +18,10 @@ abstract class FirebaseModel implements ArrayAccess, JsonSerializable
 
     public function __construct(array $attributes = [])
     {
+        $firebaseCredentiels= base64_decode(config('firebase.credentials'));
         $this->fill($attributes);
         $firebase = (new Factory)
-        ->withServiceAccount(config('firebase.credentials'))
+        ->withServiceAccount(json_decode($firebaseCredentiels,true))
         ->withDatabaseUri(config('firebase.database_url'));
         // $this->collection = $firebase->createDatabase()->getReference($this->collection());
         $this->auth = $firebase->createAuth();

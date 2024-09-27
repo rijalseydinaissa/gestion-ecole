@@ -14,8 +14,9 @@ class FirebaseModelProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Database::class, function ($app) {
+            $firebaseCredentiels= base64_decode(config('firebase.credentials'));
             return (new Factory)
-                ->withServiceAccount(config('firebase.credentials'))
+                ->withServiceAccount(json_decode($firebaseCredentiels,true) )
                 ->withDatabaseUri(config('firebase.database_url'))
                 ->createDatabase();
         });
