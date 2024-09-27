@@ -4,11 +4,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile  # Le Dockerfile pour le service PHP avec Laravel
+      dockerfile: Dockerfile
     container_name: app
     volumes:
-      - .:/var/www  # Monter le projet dans le conteneur
-      - ./gestion-ecole/issa.json://home/issa/Bureau/Laravel/GestionEcole/gestion-ecole/issa.json  # Monture du fichier JSON
+      - .:/var/www
+      - ./gestion-ecole/issa.json:/home/issa/Bureau/Laravel/GestionEcole/gestion-ecole/issa.json
+    ports:
+      - "9000:9000"  # Le serveur Artisan écoutera sur ce port
     networks:
       - laravel
     environment:
@@ -18,10 +20,8 @@ services:
       DB_DATABASE: laravelwalo
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
-    ports:
-      - "9000:9000"  # Exposer le port 9000 pour le serveur Laravel
 
-  postgres:
+  postgres:  # Service PostgreSQL
     image: postgres:latest
     container_name: postgres
     restart: always
@@ -30,7 +30,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data  # Volume persistant pour les données PostgreSQL
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - laravel
 
@@ -39,4 +39,4 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
+  postgres_data:  # Volume persistant pour les données PostgreSQL
