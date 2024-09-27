@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Endroid\QrCode\QrCode; 
 use App\Mail\AuthenticationEmail;
 use Endroid\QrCode\Writer\PngWriter; // Ajoutez cette ligne pour le writer
-use App\Jobs\SendMailApprenantJob;
+use SendRegistrationEmail;
 
 
 class FirebaseApprenantService implements ApprenantServiceInterface
@@ -23,13 +23,12 @@ class FirebaseApprenantService implements ApprenantServiceInterface
     public function create(array $data): string
     {
         $apprenant = $this->apprenantRepository->create($data);
-        $matricule = $this->generateMatricule($apprenant);
-        $qrCodeUrl = $this->generateQRCode($apprenant);
-        $this->apprenantRepository->update($apprenant->id, [
-            'matricule' => $matricule,
-            'qr_code' => $qrCodeUrl,
-        ]);
-        SendMailApprenantJob::dispatch($apprenant->email, $matricule, $apprenant->password);
+        // $matricule = $this->generateMatricule($apprenant);
+        // $qrCodeUrl = $this->generateQRCode($apprenant);
+        // $this->apprenantRepository->update($apprenant->id, [
+        //     'matricule' => $matricule,
+        //     'qr_code' => $qrCodeUrl,
+        // ]);
         return $apprenant->getKey();
     }
     private function generateMatricule(Apprenant $apprenant): string
@@ -53,9 +52,6 @@ class FirebaseApprenantService implements ApprenantServiceInterface
         file_put_contents(storage_path('app/public/' . $qrCodePath), $result->getString());
         return asset('storage/' . $qrCodePath);
     }
-    
-    
-    
     
 
     public function update(string $id, array $data): void

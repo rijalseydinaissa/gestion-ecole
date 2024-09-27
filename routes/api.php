@@ -63,6 +63,12 @@ Route::prefix('v1/apprenants')->group(function () {
     Route::delete('/{id}', [ApprenantController::class, 'delete']);
     Route::get('/active', [ApprenantController::class, 'getActiveApprenant']);
     Route::put('/deactivate', [ApprenantController::class, 'deactivateOtherApprenants']);
+    // Route pour exporter les apprenants en PDF
+Route::get('/apprenants/export/pdf', [ApprenantController::class, 'exportPdf']);
+// Route pour exporter les apprenants en Excel
+Route::get('/apprenants/export/excel', [ApprenantController::class, 'exportExcel']);
+
+
 });
 
 // ->middleware(['auth:api'])
