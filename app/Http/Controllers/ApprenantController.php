@@ -106,7 +106,7 @@ class ApprenantController extends Controller
         return response()->json(['error' => $e->getMessage()], 500);
     }
 }
-
+    
     
     
     protected function checkReferentielInFirebase(string $referentielId): bool

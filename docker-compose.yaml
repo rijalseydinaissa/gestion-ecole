@@ -10,7 +10,7 @@ services:
       - .:/var/www
       - ./gestion-ecole/issa.json:/home/issa/Bureau/Laravel/GestionEcole/gestion-ecole/issa.json
     ports:
-      - "9000:9000"  # Le serveur Artisan écoutera sur ce port
+      - "8000:8000"  # Le serveur Artisan écoutera sur ce port
     networks:
       - laravel
     environment:

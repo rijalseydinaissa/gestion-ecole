@@ -42,7 +42,7 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/bootstrap/cache
 
 # Exposer le port 8000 pour le serveur Artisan
-EXPOSE 9000
+EXPOSE 8000
 
 # Lancer le serveur Laravel Artisan
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=9000"]
